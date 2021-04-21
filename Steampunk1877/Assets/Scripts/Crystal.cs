@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickUp : MonoBehaviour
+public class Crystal : PickUp
 {
-    public virtual void Picked()
-        {
-        Debug.Log("Podniesione!");
-        Destroy(this.gameObject);
-    }
-    public void Rotation()
+    public int point = 5;
+    public override void Picked()
     {
-        transform.Rotate(new Vector3(0, 5f, 0));
+        GameMenager.gameMenager.AddPoints(point);
+        Destroy(this.gameObject);
     }
 
     // Start is called before the first frame update
@@ -23,6 +20,6 @@ public class PickUp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Rotation();
     }
 }

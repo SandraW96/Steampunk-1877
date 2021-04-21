@@ -4,6 +4,27 @@ using UnityEngine;
 
 public class GameMenager : MonoBehaviour
 {
+
+    public int points = 0;
+    public int redKey = 0;
+    public int crystal = 0;
+    public int goldenKey = 0;
+
+    public void AddPoints(int point)
+    {
+        points += points;
+    }
+
+    public void AddTime(int addTime)
+    {
+        timeToEnd += addTime;
+    }
+
+    public void FreezTime(int freez)
+    {
+        CancelInvoke("Stopper");
+        InvokeRepeating("Stopper", freez, 1);
+    }
     void Stopper()
     {
         timeToEnd--;

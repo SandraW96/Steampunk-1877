@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickUp : MonoBehaviour
+public class Key : PickUp
 {
-    public virtual void Picked()
-        {
-        Debug.Log("Podniesione!");
-        Destroy(this.gameObject);
-    }
-    public void Rotation()
+
+
+    public enum KeyColor
     {
-        transform.Rotate(new Vector3(0, 5f, 0));
+        Red,
+        Crystal,
+        Gold
+    }
+
+    public KeyColor color;
+
+    public override void Picked()
+    {
+        GameMenager.gameMenager.AddKey(color);
+        Destroy(this.gameObject);
     }
 
     // Start is called before the first frame update
@@ -23,6 +30,6 @@ public class PickUp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Rotation();
     }
 }

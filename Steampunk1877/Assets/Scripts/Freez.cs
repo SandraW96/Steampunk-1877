@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickUp : MonoBehaviour
+public class Freez : PickUp
 {
-    public virtual void Picked()
-        {
-        Debug.Log("Podniesione!");
+    public int freezTime = 10;
+
+    public override void Picked()
+    {
+        GameMenager.gameMenager.FreezTime(freezTime);
         Destroy(this.gameObject);
     }
-    public void Rotation()
-    {
-        transform.Rotate(new Vector3(0, 5f, 0));
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +20,6 @@ public class PickUp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Rotation();
     }
 }
