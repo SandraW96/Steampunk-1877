@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum KeyColor
+{
+    Red,
+    Crystal,
+    Gold
+}
 public class Key : PickUp
 {
-
-
-    public enum KeyColor
-    {
-        Red,
-        Crystal,
-        Gold
-    }
-
     public KeyColor color;
 
     public override void Picked()

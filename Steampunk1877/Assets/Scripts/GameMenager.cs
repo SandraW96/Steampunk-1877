@@ -25,6 +25,22 @@ public class GameMenager : MonoBehaviour
         CancelInvoke("Stopper");
         InvokeRepeating("Stopper", freez, 1);
     }
+
+    public void AddKey(KeyColor color)
+    {
+        if (color == KeyColor.Gold)
+        {
+            goldenKey++;
+        }
+        else if (color == KeyColor.Crystal)
+        {
+            crystal++;
+        }
+        else if (color == KeyColor.Red)
+        {
+            redKey++;
+        }
+    }
     void Stopper()
     {
         timeToEnd--;
