@@ -10,6 +10,14 @@ public class GameMenager : MonoBehaviour
     public int crystal = 0;
     public int goldenKey = 0;
 
+    AudioSource audioSource;
+    public AudioClip resumeClip;
+    public AudioClip pauseClip;
+    public AudioClip winClip;
+    public AudioClip loseClip;
+
+    public MusicScript musicScript;
+
     public void AddPoints(int point)
     {
         points += points;
@@ -56,18 +64,40 @@ public class GameMenager : MonoBehaviour
         {
             EndGame();
         }
+        if (timeToEnd < 20 && !lessTime)
+        {
+            LessTimeOn();
+            lessTime = true;
+        }
+        if (timeToEnd> 20 && lessTime)
+        {
+            LessTimeOff();
+            lessTime = false;
+        }
     }
     public void PauseGame()
     {
         Debug.Log("Pause Game");
         Time.timeScale = 0f;
         gamePaused = true;
+        PlayClip(pauseClip);
+        musicScript.OnPauseGame();
     }
     public void ResumeGame()
     {
         Debug.Log("Resume Game");
         Time.timeScale = 1f;
         gamePaused = false;
+        PlayClip(resumeClip);
+        musicScript.OnResumeGame();
+    }
+    public void LessTimeOn()
+    {
+        musicScript.PitchThis(1.58f);
+    }
+    public void LessTimeOff()
+    {
+        musicScript.PitchThis(1f);
     }
 
     public void EndGame()
@@ -76,10 +106,12 @@ public class GameMenager : MonoBehaviour
         if (win)
         {
             Debug.Log("You win!!!");
+            PlayClip(winClip);
         }
         else
         {
             Debug.Log("You lose!!!");
+            PlayClip(loseClip);
         }
     }
     public static GameMenager gameMenager;
@@ -87,6 +119,13 @@ public class GameMenager : MonoBehaviour
     bool gamePaused = false;
     bool endGame = false;
     bool win = false;
+    bool lessTime = false;
+
+    public void PlayClip(AudioClip playClip)
+    {
+        audioSource.clip = playClip;
+        audioSource.Play();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -101,6 +140,9 @@ public class GameMenager : MonoBehaviour
         {
             timeToEnd = 20;
         }
+
+        audioSource = GetComponent<AudioSource>();
+        InvokeRepeating("Stopper", 2, 1);
     }
 
     // Update is called once per frame
