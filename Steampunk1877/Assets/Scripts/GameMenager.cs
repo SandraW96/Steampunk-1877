@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameMenager : MonoBehaviour
 {
-
     public int points = 0;
     public int redKey = 0;
     public int crystal = 0;
