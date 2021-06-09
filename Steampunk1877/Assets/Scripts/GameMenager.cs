@@ -2,9 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameMenager : MonoBehaviour
 {
+    public Text timetext;
+    public Text goldKeyText;
+    public Text redKeyText;
+    public Text greenKeyText;
+    public Text crystalText;
+    public Image snowFlake;
+
+    public GameObject infoPanel;
+    public Text paused;
+    public Text reloadInfo;
+    public Text useInfo;
+
     public int points = 0;
     public int redKey = 0;
     public int crystal = 0;
@@ -20,17 +33,20 @@ public class GameMenager : MonoBehaviour
 
     public void AddPoints(int point)
     {
-        points += points;
+        points += point;
+        crystalText.text = points.ToString();
     }
 
     public void AddTime(int addTime)
     {
         timeToEnd += addTime;
+        timetext.text = timeToEnd.ToString();
     }
 
     public void FreezTime(int freez)
     {
         CancelInvoke("Stopper");
+        snowFlake.enabled = true;
         InvokeRepeating("Stopper", freez, 1);
     }
 
@@ -39,20 +55,26 @@ public class GameMenager : MonoBehaviour
         if (color == KeyColor.Gold)
         {
             goldenKey++;
+            goldKeyText.text = goldenKey.ToString();
         }
         else if (color == KeyColor.Crystal)
         {
             crystal++;
+
         }
         else if (color == KeyColor.Red)
         {
             redKey++;
+            redKeyText.text = redKey.ToString();
         }
     }
     void Stopper()
     {
         timeToEnd--;
-        Debug.Log("Time: " + timeToEnd + "s");
+        timetext.text = timeToEnd.ToString();
+        snowFlake.enabled = false;
+
+        //Debug.Log("Time: " + timeToEnd + "s");
         if (timeToEnd <= 0)
         {
             timeToEnd = 0;
@@ -77,7 +99,8 @@ public class GameMenager : MonoBehaviour
     }
     public void PauseGame()
     {
-        Debug.Log("Pause Game");
+        infoPanel.SetActive(true);
+        //Debug.Log("Pause Game");
         Time.timeScale = 0f;
         gamePaused = true;
         PlayClip(pauseClip);
@@ -85,7 +108,8 @@ public class GameMenager : MonoBehaviour
     }
     public void ResumeGame()
     {
-        Debug.Log("Resume Game");
+        //Debug.Log("Resume Game");
+        infoPanel.SetActive(false);
         Time.timeScale = 1f;
         gamePaused = false;
         PlayClip(resumeClip);
@@ -103,14 +127,20 @@ public class GameMenager : MonoBehaviour
     public void EndGame()
     {
         CancelInvoke("Stopper");
+        infoPanel.SetActive(true);
+
         if (win)
         {
-            Debug.Log("You win!!!");
+            //Debug.Log("You win!!!");
+            paused.text = "Win!!";
+            reloadInfo.text = "Reload? Y/N";
             PlayClip(winClip);
         }
         else
         {
-            Debug.Log("You lose!!!");
+            paused.text = "Loser!";
+            reloadInfo.text = "Reload? Y/N";
+            //Debug.Log("You lose!!!");
             PlayClip(loseClip);
         }
     }
@@ -126,6 +156,16 @@ public class GameMenager : MonoBehaviour
         audioSource.clip = playClip;
         audioSource.Play();
     }
+    public void SetUseInfo(string info)
+    {
+        useInfo.text = info;
+    }
+
+    public void WinGame()
+    {
+        win = true;
+        endGame = true;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -140,6 +180,17 @@ public class GameMenager : MonoBehaviour
         {
             timeToEnd = 20;
         }
+
+        snowFlake.enabled = false;
+        timetext.text = timeToEnd.ToString();
+        infoPanel.SetActive(false);
+        paused.text = "Pause";
+        reloadInfo.text = " ";
+        SetUseInfo("");
+        LessTimeOff();
+
+        Time.timeScale = 1f;
+
 
         audioSource = GetComponent<AudioSource>();
         InvokeRepeating("Stopper", 2, 1);
@@ -157,6 +208,18 @@ public class GameMenager : MonoBehaviour
             else
             {
                 PauseGame();
+            }
+        }
+
+        if (endGame)
+        {
+            if (Input.GetKeyDown(KeyCode.Y))
+            {
+                SceneManager.LoadScene(0);
+            }
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                Application.Quit();
             }
         }
     }
